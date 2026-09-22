@@ -1,38 +1,80 @@
-# HelpDesk
+# HelpDesk Web
 
-Sistema Full Stack de gerenciamento de chamados, permitindo controle por permissões de usuários com diferentes roles: **Admin**, **Cliente** e **Técnico**.
+Aplicação web para gerenciamento de chamados, desenvolvida com **React e TypeScript** e voltada para três perfis de usuários: **Administrador, Técnico e Cliente**.
 
----
-
-## Tecnologias
-
-- **Frontend**: React, TypeScript, Tailwind CSS, Tailwind Variants, React Hook Form, Zod
-- **Backend**: Node.js, fastify, TypeScript
-- **Gerenciamento de estado**: React Query
-- **Validação de dados**: Zod
-- **Estilização**: Tailwind CSS + Tailwind Variants para componentes reutilizáveis
-
----
+O HelpDesk é composto por uma API compartilhada e duas aplicações clientes: **Web e Mobile**. A versão Web consome a mesma API utilizada pelo aplicativo mobile.
 
 ## Funcionalidades
 
-### Geral
-
-- Autenticação de usuários com roles diferentes
-- Interface responsiva para desktop e mobile
-- Componentes reutilizáveis utilizando Tailwind Variants
-
-### Admin
-
-- Gerenciar todos os chamados
-- Gerenciar todos os técnicos
-- Gerenciar todos os clientes
+### Administrador
+- Gerenciamento de chamados
+- Gerenciamento de técnicos
+- Gerenciamento de clientes
 
 ### Técnico
-
-- Visualizar chamados atribuídos
+- Visualização de chamados atribuídos
 
 ### Cliente
+- Abertura de novos chamados
+- Acompanhamento do status dos chamados
+- Visualização do histórico de chamados
 
-- Abrir novos chamados
-- Visualizar status e histórico de chamados
+### Geral
+- Autenticação de usuários
+- Controle de acesso por perfil
+- Interface responsiva
+- Integração com API REST
+- Formulários com validação
+- Componentes reutilizáveis
+
+## Tecnologias
+
+- React
+- TypeScript
+- React Query
+- React Hook Form
+- Zod
+- Tailwind CSS
+- Tailwind Variants
+
+## Decisões técnicas
+
+**React Query**  
+Utilizado no gerenciamento das requisições e dos dados provenientes da API.
+
+**React Hook Form + Zod**  
+Utilizados no gerenciamento e validação dos formulários.
+
+**Tailwind Variants**  
+Utilizado na construção de componentes reutilizáveis com diferentes variações visuais.
+
+**TypeScript**  
+Utilizado para tipagem dos dados e maior segurança durante o desenvolvimento.
+
+## Ecossistema HelpDesk
+
+- **Web:** React + TypeScript
+- **Mobile:** React Native + TypeScript
+- **API:** Node.js + Fastify + TypeScript + PostgreSQL
+
+## Repositórios
+
+- [HelpDesk Web](https://github.com/guilhermeborim/helpdesk-web)
+- [HelpDesk API](https://github.com/guilhermeborim/helpdesk-api)
+- [HelpDesk Mobile](https://github.com/guilhermeborim/helpdesk-app)
+
+## Executando o projeto
+
+```bash
+git clone https://github.com/guilhermeborim/helpdesk-web.git
+cd helpdesk-web
+npm install
+npm run dev
+```
+
+## Autor
+
+**Guilherme Borim**
+
+- [LinkedIn](https://www.linkedin.com/in/guilhermeborim)
+- [GitHub](https://github.com/guilhermeborim)
