@@ -3,12 +3,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import React from "react";
 import { api, fetcher } from "../../../helpers/api";
-import type { CallResponse } from "../models/call";
+import type { CallResponse, StatusType } from "../models/call";
 import type { CallFormSchema } from "../schemas";
 
 export default function useCall() {
   const { decoded } = useAuth();
   const [error, setError] = React.useState<string | null>(null);
+  const [statusError, setStatusError] = React.useState<string | null>(null);
 
   const { data, isLoading } = useQuery<CallResponse>({
     queryKey: ["call"],
@@ -64,6 +65,23 @@ export default function useCall() {
     },
   });
 
+  const statusMutation = useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: StatusType }) => {
+      try {
+        setStatusError(null);
+        await api.patch(`/calls/${id}/status`, { status });
+
+        queryClient.invalidateQueries({ queryKey: ["call_tech"] });
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          setStatusError(
+            error.response?.data.message || "Erro ao atualizar status"
+          );
+        }
+      }
+    },
+  });
+
   return {
     data,
     isLoading,
@@ -71,6 +89,8 @@ export default function useCall() {
     isLoadingClient,
     error,
     mutation,
+    statusMutation,
+    statusError,
     dataTech,
     isLoadingTech,
   };

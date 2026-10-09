@@ -10,8 +10,7 @@ import { signFormSchema, type SignFormSchema } from "../schemas";
 export default function Sign() {
   const { signIn, signInAdmin, signInTec, error } = useAuth();
   const [connectingUser, setConnectingUser] = React.useTransition();
-  const [connectingUserAdmin, setConnectingUserAdmin] = React.useTransition();
-  const [connectingUserTec, setConnectingUserTec] = React.useTransition();
+
   const form = useForm<SignFormSchema>({
     resolver: zodResolver(signFormSchema),
   });
@@ -22,15 +21,9 @@ export default function Sign() {
     });
   }
 
-  function handleSubmitAdmin() {
-    setConnectingUserAdmin(async () => {
-      await signInAdmin();
-    });
-  }
-
-  function handleSubmitTec() {
-    setConnectingUserTec(async () => {
-      await signInTec();
+  function handleDemo(login: () => Promise<void>) {
+    setConnectingUser(async () => {
+      await login();
     });
   }
 
@@ -66,25 +59,40 @@ export default function Sign() {
         <Button variant="primary" type="submit" disabled={connectingUser}>
           {connectingUser ? "Entrando..." : "Entrar"}
         </Button>
-        <div className="flex gap-2 mt-2">
+        {error && <Text>{error}</Text>}
+        <div className="flex flex-col gap-2 pt-6">
+          <Text variant="body-xs" className="text-gray-300">
+            Acesso de demonstração
+          </Text>
           <Button
             variant="secondary"
             type="button"
-            disabled={connectingUserAdmin}
-            onClick={handleSubmitAdmin}
+            disabled={connectingUser}
+            onClick={() => handleDemo(signInAdmin)}
           >
-            {connectingUserAdmin ? "Entrando..." : "ADMIN"}
+            Entrar como Admin
           </Button>
           <Button
             variant="secondary"
             type="button"
-            disabled={connectingUserTec}
-            onClick={handleSubmitTec}
+            disabled={connectingUser}
+            onClick={() => handleDemo(signInTec)}
           >
-            {connectingUserTec ? "Entrando..." : "TÉCNICO"}
+            Entrar como Técnico
+          </Button>
+          <Button
+            variant="secondary"
+            type="button"
+            disabled={connectingUser}
+            onClick={() =>
+              handleDemo(() =>
+                signIn({ email: "cliente@gmail.com", password: "123456" })
+              )
+            }
+          >
+            Entrar como Cliente
           </Button>
         </div>
-        {error && <Text>{error}</Text>}
       </div>
     </form>
   );

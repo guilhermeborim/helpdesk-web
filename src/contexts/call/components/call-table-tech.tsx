@@ -38,8 +38,15 @@ const statusConfig: StatusConfig = {
   },
 };
 
+const nextStatus: Partial<
+  Record<StatusType, { status: StatusType; label: string }>
+> = {
+  ABERTO: { status: "EM_ATENDIMENTO", label: "Iniciar" },
+  EM_ATENDIMENTO: { status: "ENCERRADO", label: "Encerrar" },
+};
+
 export default function CallTableTech() {
-  const { dataTech } = useCall();
+  const { dataTech, statusMutation, statusError } = useCall();
   const desktop = useMediaQuery({ minWidth: 768 });
   const calls = dataTech?.calls ?? [];
 
@@ -184,6 +191,31 @@ export default function CallTableTech() {
         );
       },
     }),
+
+    columnHelper.display({
+      id: "actions",
+      header: () => (
+        <Text as="span" variant="body-sm-bold" className="text-gray-400">
+          Ação
+        </Text>
+      ),
+      cell: (info) => {
+        const call = info.row.original;
+        const next = nextStatus[call.status];
+        if (!next) return null;
+        return (
+          <button
+            className="cursor-pointer px-3 py-1 rounded border border-gray-500 text-gray-200 disabled:opacity-50"
+            disabled={statusMutation.isPending}
+            onClick={() =>
+              statusMutation.mutate({ id: call.id, status: next.status })
+            }
+          >
+            {next.label}
+          </button>
+        );
+      },
+    }),
   ];
 
   const table = useReactTable({
@@ -229,6 +261,12 @@ export default function CallTableTech() {
           ))}
         </tbody>
       </table>
+
+      {statusError && (
+        <Text variant="body-sm" className="text-red-500 px-4 py-2">
+          {statusError}
+        </Text>
+      )}
 
       <div className="flex justify-between items-center px-4 py-3 border-t border-gray-500">
         <Text variant="body-sm" className="text-gray-400">
